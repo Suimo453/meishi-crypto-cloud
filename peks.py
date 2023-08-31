@@ -8,6 +8,8 @@ from bls12381.ecp2 import ECp2
 from bls12381 import pair
 from bls12381.fp12 import Fp12
 
+  ## 変更
+
 G2_TAB = []
 
 def init():
