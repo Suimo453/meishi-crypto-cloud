@@ -7,8 +7,9 @@ from bls12381.ecp import ECp
 from bls12381.ecp2 import ECp2
 from bls12381 import pair
 from bls12381.fp12 import Fp12
+from flask import Flask, request
+app = Flask(__name__)
 
-  ## 変更
 
 G2_TAB = []
 
@@ -68,3 +69,25 @@ cipher_tag1,cipher_tag2 = PKES("atsu",pk)
 trapdoor = Trapdoor(sk,"atsu")
 result = Test(trapdoor,cipher_tag1,cipher_tag2)
 print(result)
+
+template = """
+<p>Hello, {}!</p>
+<form action='/hello' method='post'>
+  <input name='name'></input>
+  <input type='submit'></input>
+</form>
+"""
+
+@app.route("/hello", methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        name = request.form["name"]
+    else:
+        name = "Taro"
+    return template.format(name)
+
+if __name__ == "__main__":
+    # サーバ立ち上げ
+    app.run(
+        host="0.0.0.0",
+        port=5000)
