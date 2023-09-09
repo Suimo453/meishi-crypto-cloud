@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>従業員一覧</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">名前</th>
+              <th scope="col">メール</th>
+              <th scope="col">リモート状況</th>
+              <th scope="col">部署</th>
+              <th scope="col">勤続年数</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for employee in employees %}
+            <tr>
+              <th scope="row">{{ employee.id }}</th>
+              <td>
+                <a class="text-decoration-none" href="{{ url_for('employee_detail', id=employee.id) }}">
+                  {{ employee.name }}
+                </a>
+              </td>
+              <td>{{ employee.mail }}</td>
+              {% if employee.is_remote %}
+                <td>リモート</td>
+              {% else %}
+                <td>出勤</td>
+              {% endif %}
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.year }}年</td>
+              <td>
+                <form action="{{ url_for('employee_delete', id=employee.id) }}" method="POST">  
+                  <input class="btn btn-danger btn-sm" type="submit" value="削除">  
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+    </table>
+</div>
+{% endblock %}

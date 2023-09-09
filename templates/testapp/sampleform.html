@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>ジャンケン</h2>
+    <form action="/sampleform" method="POST">        
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="gu" name="janken" value="0" checked>
+            <label class="form-check-label" for="gu">グー</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="choki" name="janken" value="1">
+            <label class="form-check-label" for="choki">チョキ</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="pa" name="janken" value="2">
+            <label class="form-check-label" for="pa">パー</label>
+          </div>
+          <button type="submit" class="btn btn-primary">送信</button>
+    </form>
+</div>
+{% endblock %}

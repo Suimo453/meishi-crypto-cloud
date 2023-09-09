@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5 d-flex justify-content-center">
+	<div class="card px-1 py-4" style="width: 400px;">
+		<div class="card-body">
+			<h6 class="card-title mb-3">新規登録ページ</h6>
+			<form action="/add_employee" method="POST">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<input name="name" class="form-control" type="text" placeholder="名前"></input>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<input name="mail" class="form-control" type="text" placeholder="メールアドレス"></input>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<div class="btn-group" role="group" aria-label="is_remote toggle">
+								<input type="radio" class="btn-check" name="is_remote" id="is_remote1" autocomplete="off" value="false" checked>
+								<label class="btn btn-outline-primary" for="is_remote1">出社</label>
+								<input type="radio" class="btn-check" name="is_remote" id="is_remote2" autocomplete="off" value="true">
+								<label class="btn btn-outline-primary" for="is_remote2">リモート</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<input name="department" class="form-control" type="text" placeholder="部署"></input>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<input name="year" min="0" class="form-control" type="number" placeholder="勤続年数"></input>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col text-center">
+						<button type="submit" class="btn btn-primary">従業員追加</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

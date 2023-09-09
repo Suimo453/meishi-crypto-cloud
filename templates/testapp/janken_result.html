@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>ジャンケンの結果</h2>
+    <p>相手：{{ result.enemy_hand_ja }}</p>
+    <p>あなた：{{ result.player_hand_ja }}</p>
+    <p>判定：{{ result.judgement }}</p>
+    <p>
+        <a href="{{ url_for('sampel_form') }}">戻る</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+      <div class="col-9">
+        <h2>従業員詳細</h2>
+      </div>
+      <div class="col-3">
+        <a class="btn btn-outline-primary" href="{{ url_for('employee_edit', id=employee.id) }}" role="button">情報編集</a>
+      </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">名前</th>
+              <th scope="col">メール</th>
+              <th scope="col">リモート状況</th>
+              <th scope="col">部署</th>
+              <th scope="col">勤続年数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">{{ employee.id }}</th>
+              <td>{{ employee.name }}</td>
+              <td>{{ employee.mail }}</td>
+              {% if employee.is_remote %}
+                <td>リモート</td>
+              {% else %}
+                <td>出勤</td>
+              {% endif %}
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.year }}年</td>
+            </tr>
+          </tbody>
+    </table>
+</div>
+{% endblock %}
