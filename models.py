@@ -22,6 +22,15 @@ class Meishi(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     updated_at = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
 
+class MeishiKey(Base):
+    __tablename__ = 'meishikey'
+    id = Column(Integer, primary_key=True)
+    company = Column(String(255))
+    firstname = Column(String(255))
+    lastname = Column(String(255))
+    meishi_id = Column(Integer)
+
+
 Base.metadata.create_all(engine)
 
 if __name__ == "__main__":
