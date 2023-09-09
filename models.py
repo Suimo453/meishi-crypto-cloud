@@ -1,4 +1,6 @@
 import json
+
+from peks import Test
 DB_FILE_NAME = "detabase.json"
 
 class Meishi():
@@ -34,26 +36,31 @@ def save(detabase):
     with open(DB_FILE_NAME,"w") as f:
         return json.dump(detabase,f)
 
+    ## 名刺の追加
+
 def add(meishi):
     detabase = select_all()
     detabase.append(meishi.to_dict())
     save(detabase)
 
-def select_by_name_key(name_key):
+    ## 名刺の検索
+
+def select_by_name_key(name_trapdoor):
     detabase = select_all()
     result = []
     for line in detabase:
         meishi = Meishi.from_dict(line)
-        if meishi.name_key == name_key:
+
+        if Test(name_trapdoor, meishi.name_key):
             result.append(meishi)
 
     return result
 
 
-
+    ## 試作用追加部分
 if __name__ == "__main__":
-    meishi1 = Meishi(company="kaisha",name="namae",image="aaaaaa",name_key="namaekagi",company_key="kaishakagi")
-    meishi2 = Meishi(company="kaishaA",name="namaeA",image="aaaaaa",name_key="namaekagiA",company_key="kaishakagiA")
+    meishi1 = Meishi(company="kaisha",name="namae",image="aaaaaa",name_key="nama.ekagi",company_key="kai.shakagi")
+    meishi2 = Meishi(company="kaishaA",name="namaeA",image="aaaaaa",name_key="nama.ekagiA",company_key="kai..shakagiA")
     add(meishi1)
     add(meishi2)
     ## print(select_all())

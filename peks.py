@@ -33,61 +33,74 @@ def BLS_H(m):
     return HM
 
 
+import base64
 # 鍵ペア（秘密鍵SKと公開鍵PK）を生成する関数
 
 def KeyPairGenerate():
     G = ecp2.generator()
     SK = big.rand(curve.r)
-    PK = SK * G
+    PK = (SK * G).toBytes(True)
+
+    SK = big.to_bytes(SK)
+    SK = base64.b64encode(SK)
+    PK = base64.b64encode(PK)
+
     return (SK, PK)
 
 # PEKS
 def PKES(tag,PK):
+    _PK = base64.b64decode(PK)
+    PK = ecp2.generator()
+    PK.fromBytes(_PK)
+
     G = ecp2.generator()
     r = big.rand(curve.r)
-    cipher_tag1 = r * G 
+    cipher_tag1 = (r * G).toBytes(True)
+
     h_tag = BLS_H(tag)
     h_r = r * PK
 
     cipher_tag2 = pair.ate(h_r,h_tag)
-    cipher_tag2 = pair.fexp(cipher_tag2)
-    return cipher_tag1,cipher_tag2
+    cipher_tag2 = pair.fexp(cipher_tag2).toBytes()
+
+    cipher_tag = base64.b64encode(cipher_tag1).decode('utf-8') + '.' + base64.b64encode(cipher_tag2).decode('utf-8')
+    return cipher_tag
 
 def Trapdoor(s,tag):
+    _s = base64.b64decode(s)
+    s = big.from_bytes(_s)
+
     h_tag = BLS_H(tag)
-    trapdoor = s * h_tag
+    trapdoor = (s * h_tag).toBytes(True)
+    trapdoor = base64.b64encode(trapdoor)
     return trapdoor
 
-def Test(trapdoor,cipher_tag1,cipher_tag2):
+def Test(trapdoor,cipher_tag):
+    _trapdoor = base64.b64decode(trapdoor)
+    trapdoor = ecp.generator()
+    trapdoor.fromBytes(_trapdoor)
+
+    cipher_tags = cipher_tag.split('.')
+    _cipher_tag1 = base64.b64decode(cipher_tags[0])
+    cipher_tag1 = ecp2.generator()
+    cipher_tag1.fromBytes(_cipher_tag1)
+    
+    _cipher_tag2 = base64.b64decode(cipher_tags[1])
+    cipher_tag2 = Fp12()
+    cipher_tag2.fromBytes(_cipher_tag2)
+
     trap_tag = pair.ate(cipher_tag1,trapdoor)
     trap_tag = pair.fexp(trap_tag)
-    return   trap_tag == cipher_tag2
+
+    return trap_tag == cipher_tag2
+
 
 init()
 sk,pk  = KeyPairGenerate()
-cipher_tag1,cipher_tag2 = PKES("atsu",pk)
-trapdoor = Trapdoor(sk,"atsu")
-result = Test(trapdoor,cipher_tag1,cipher_tag2)
+cipher_tag = PKES("あ",pk)
+trapdoor = Trapdoor(sk,"い")
+
+result = Test(trapdoor,cipher_tag)
 print(result)
 
-template = """
-<p>Hello, {}!</p>
-<form action='/hello' method='post'>
-  <input name='name'></input>
-  <input type='submit'></input>
-</form>
-"""
 
-@app.route("/hello", methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        name = request.form["name"]
-    else:
-        name = "Taro"
-    return template.format(name)
-
-if __name__ == "__main__":
-    # サーバ立ち上げ
-    app.run(
-        host="0.0.0.0",
-        port=5000)
