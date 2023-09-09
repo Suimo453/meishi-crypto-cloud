@@ -1,37 +1,31 @@
-from sqlalchemy import create_engine, func
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.schema import Column
-from sqlalchemy.types import Integer, String, Float, BigInteger
-from sqlalchemy.orm import sessionmaker
-from datetime import datetime
-from sqlalchemy import DateTime
-Base = declarative_base()
-engine = create_engine(f'sqlite:///db.sqlite3')
-SessionClass = sessionmaker(engine)
-session = SessionClass()
+import json
+DB_FILE_NAME = "detabase.json"
 
-class Meishi(Base):
-    __tablename__ = 'meishi'
-    company = Column(String(255))
-    id = Column(Integer, primary_key=True)
-    firstname = Column(String(255))
-    lastname = Column(String(255))
-    mail = Column(String(255))
-    department = Column(String(255))
-    picture = Column(String(50*1000*1000))
-    created_at = Column(DateTime, nullable=False, default=datetime.now)
-    updated_at = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
+class Meishi():
+    def __init__(self,name,company,image,name_key,company_key):
+        self.name = name
+        self.company = company
+        self.image = image
+        self.name_key = name_key
+        self.company_key = company_key
 
-class MeishiKey(Base):
-    __tablename__ = 'meishikey'
-    id = Column(Integer, primary_key=True)
-    company = Column(String(255))
-    firstname = Column(String(255))
-    lastname = Column(String(255))
-    meishi_id = Column(Integer)
+def select_all():
+    with open(DB_FILE_NAME) as f:
+        return json.load(f)
 
+def save(detabase):
+    with open(DB_FILE_NAME,"w") as f:
+        return json.dump(detabase,f)
 
-Base.metadata.create_all(engine)
+def add(meishi):
+    detabase = select_all()
+    detabase.append(meishi.__dict__)
+    save(detabase)
+
 
 if __name__ == "__main__":
-    pass
+    meishi1 = Meishi(company="kaisha",name="namae",image="aaaaaa",name_key="namaekagi",company_key="kaishakagi")
+    meishi2 = Meishi(company="kaishaA",name="namaeA",image="aaaaaa",name_key="namaekagiA",company_key="kaishakagiA")
+    add(meishi1)
+    add(meishi2)
+    print(select_all())
