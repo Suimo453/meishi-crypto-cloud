@@ -56,6 +56,27 @@ def select_by_name_key(name_trapdoor):
 
     return result
 
+def select_by_company_key(company_trapdoor):
+    detabase = select_all()
+    result = []
+    for line in detabase:
+        meishi = Meishi.from_dict(line)
+
+        if Test(company_trapdoor, meishi.company_key):
+            result.append(meishi)
+
+    return result
+
+def select(name_trapdoor,company_trapdoor):
+    detabase = select_all()
+    result = []
+    for line in detabase:
+        meishi = Meishi.from_dict(line)
+
+        if Test(name_trapdoor, meishi.name_key) and Test(company_trapdoor, meishi.company_key):
+            result.append(meishi)
+
+    return result
 
     ## 試作用追加部分
 if __name__ == "__main__":
@@ -66,5 +87,6 @@ if __name__ == "__main__":
     ## print(select_all())
 
     meishi = select_by_name_key(name_key = "namaekagi")
+    meishi = select_by_company_key(company_key = "namaekagi")
     print(meishi[0])
     
